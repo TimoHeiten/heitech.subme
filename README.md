@@ -1,12 +1,29 @@
 # heitech.subme
-Mini PubSub for decoupling components in your system
+Mini PubSub for decoupling components in your system.
+No complex logic, just simple decoupling.
+
+## Bus 
+- Publish and PublishAsync
+  Works only when any subscribers for any given Type T exist (no type constraints)
+  Publish is fire and forget, PublishAsync awaits all subscribers
+- Subscribe and Unsubscribe
+  Do whatever you guess they would ;)
+
+  (see example below for more details)
+
+## Logging
+- Logging is set to log on the console.writeline
+- You can easily overwrite it by registering two callbacks that take the formatted logmessage from this framework as input
+- ```cs 
+    Bus.OverrideLogging(onLost: logMessage => myLoggerInstance.Log(logMessage), onAny: logMessage => myLoggerInstance.Log(logmessage));
+- onLost gets called when no Subscriber is registered for the given Type
+- onAny is called for every other logging scenario of this framework
 
 # TL;DR
 - Use static class Bus.cs (or extensions) to Publish and Subscribe. 
 - Subscribe on Custom types that implement ISubscriber, 
 - Publish after any calls to Bus.Subscribe where set up.
 
-No complex logic, just simple decoupling.
 
 # Example from Program.cs
 ```cs
@@ -85,4 +102,3 @@ class Program
             public Task ReceiveAsync<T>(T msg) => NowReceiving(this, msg);
         }
     }
-    ```
